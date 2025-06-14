@@ -39,7 +39,7 @@ router.use('/', function (req, res, next) {
     }
 
     // Verificar si la IP es una de las autorizadas
-    if (ip === '::ffff:18.209.80.3' || ip === '::ffff:54.87.231.232') { 
+    if (ip === '18.209.80.3' || ip === '54.87.231.232') { 
         next(); 
     } else {
         console.log(colors.red(`Bad Request from: ${ip}`));
