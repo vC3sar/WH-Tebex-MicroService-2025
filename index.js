@@ -1,7 +1,7 @@
 const fs = require('fs');
 var colors = require('colors');
 const winston = require('winston');
-const { debug, shopchannelID2, defPort, embed, token, shopchannelID, language } = require("./config.json");
+const { debug, shopchannelID2, defPort, embed, token, shopchannelID, language, showServer } = require("./config.json");
 const type_req = require('./handlers/type_request.js');
 const validfrom = require('./handlers/from.js');
 const { autoTranslate } = require('./functions/translate.js');
