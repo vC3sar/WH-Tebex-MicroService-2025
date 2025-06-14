@@ -18,7 +18,7 @@ const logger = winston.createLogger({
 
 // Función para verificar si una IP es interna (Docker)
 function isDockerIP(ip) {
-    return /^172\./.test(ip) || /^192\./.test(ip) || /^10\./.test(ip);
+    return /^172\./.test(ip) || /^192\./.test(ip) || /^10\./.test(ip) || /^::ffff:/.test(ip);;
 }
 
 // Función para obtener la IP real
