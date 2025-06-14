@@ -78,14 +78,15 @@ client.on('ready', () => {
     try {
       // Process the request
       const products = req.body.subject.products;
+      const temp;
       if (showServer = false) { 
-        const temp = products.map((product) => `${emojiproductArrow}${product.name} **x${product.quantity}** **|** $${product.paid_price.amount.toFixed(2)}`).join('\n'); 
+        temp = products.map((product) => `${emojiproductArrow}${product.name} **x${product.quantity}** **|** $${product.paid_price.amount.toFixed(2)}`).join('\n'); 
       } else{
-        const temp = products.map((product) => { 
+        temp = products.map((product) => { 
         const servers = (product.servers || []).map((server) => server.name).join('\n') || 'Ninguno'; 
         return `${emojiproductArrow}${product.name}**x${product.quantity}** **|** $${product.paid_price.amount.toFixed(2)}\n${conf.messages.servidor}: ${servers}`;
       }).join('\n');
- }
+      }
       const totalPrice = `${req.body.subject.price.amount.toFixed(2)} **${req.body.subject.price.currency}** ${emojicurrency}`;
       const channel = client.channels.cache.get(shopchannelID);
       if (debug == true) console.log(`${conf.messages.getchannel} ${channel}`);
