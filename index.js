@@ -83,7 +83,7 @@ client.on('ready', () => {
       } else{
         const temp = products.map((product) => { 
         const servers = (product.servers || []).map((server) => server.name).join('\n') || 'Ninguno'; 
-        return ${emojiproductArrow}${product.name}**x${product.quantity}** **|** $${product.paid_price.amount.toFixed(2)}\nServidor: ${servers}';
+        return `${emojiproductArrow}${product.name}**x${product.quantity}** **|** $${product.paid_price.amount.toFixed(2)}\nServidor: ${servers}`;
       }).join('\n');
  }
       const totalPrice = `${req.body.subject.price.amount.toFixed(2)} **${req.body.subject.price.currency}** ${emojicurrency}`;
