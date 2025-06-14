@@ -1,5 +1,5 @@
 {
-  "showServer", false,
+  "showServer": false,
   "debug": false,
   "defPort": "25500 (Port)",
   "token": "DISCORD TOKEN SECRET",
