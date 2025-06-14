@@ -78,7 +78,7 @@ client.on('ready', () => {
     try {
       // Process the request
       const products = req.body.subject.products;
-      if (showServer == false) { 
+      if (showServer = false) { 
         const temp = products.map((product) => `${emojiproductArrow}${product.name} **x${product.quantity}** **|** $${product.paid_price.amount.toFixed(2)}`).join('\n'); 
       } else{
         const temp = products.map((product) => { 
