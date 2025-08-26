@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { autoTranslate } = require('./../functions/translate_service.js'); // tu versión con got
+const { autoTranslate } = require('./../functions/translate_service.js'); // Import the new translation service
 
 async function translateJSON(json, targetLanguage) {
   const translatedJSON = {};
@@ -7,10 +7,10 @@ async function translateJSON(json, targetLanguage) {
     if (typeof json[key] === 'object') {
       translatedJSON[key] = await translateJSON(json[key], targetLanguage);
     } else {
-      // llamamos a autoTranslate
+      // call translation function
       const translation = await autoTranslate(json[key], { to: targetLanguage });
-      translatedJSON[key] = translation.text; // autoTranslate devuelve {text, from, to}
-    }
+      translatedJSON[key] = translation.text; // autoTranslate returns { text, from, to }
+    }                                         
   }
   return translatedJSON;
 }
