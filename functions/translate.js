@@ -1,6 +1,5 @@
 const fs = require('fs');
-const translate = require('translate-google');
-const colors = require('colors');
+const { autoTranslate } = require('./../functions/translate_service.js'); // tu versión con got
 
 async function translateJSON(json, targetLanguage) {
   const translatedJSON = {};
@@ -8,8 +7,9 @@ async function translateJSON(json, targetLanguage) {
     if (typeof json[key] === 'object') {
       translatedJSON[key] = await translateJSON(json[key], targetLanguage);
     } else {
-      const translation = await translate(json[key], { to: targetLanguage });
-      translatedJSON[key] = translation;
+      // llamamos a autoTranslate
+      const translation = await autoTranslate(json[key], { to: targetLanguage });
+      translatedJSON[key] = translation.text; // autoTranslate devuelve {text, from, to}
     }
   }
   return translatedJSON;
@@ -17,7 +17,7 @@ async function translateJSON(json, targetLanguage) {
 
 module.exports.autoTranslate = async function(jsonFile, targetLanguage) {
   try {
-    const jsonContent = await fs.promises.readFile('./langs/spanish.json', 'utf8');
+    const jsonContent = await fs.promises.readFile(jsonFile, 'utf8');
     const originalJSON = JSON.parse(jsonContent);
     const translatedJSON = await translateJSON(originalJSON, targetLanguage);
     const outputFile = `./langs/${targetLanguage}.json`;
@@ -25,8 +25,7 @@ module.exports.autoTranslate = async function(jsonFile, targetLanguage) {
     await fs.promises.writeFile(outputFile, JSON.stringify(translatedJSON, null, 2));
 
     console.log('Language translated with success:', outputFile);
-    console.log(`${colors.yellow("Please, restart the bot to apply the changes.")}`);
-    process.exit();
+    console.log('Please, restart the bot to apply the changes.');
   } catch (error) {
     console.error('Error:', error);
   }

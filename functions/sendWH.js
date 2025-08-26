@@ -13,9 +13,11 @@ const logger = winston.createLogger({
 async function sendWH(longitud, username, product, price, channel, url, url_infooter, color, emojititle, emojireact, gifurl, imageurl, conf, EmbedBuilder) {
   try {
     console.log(product);
+    // Create the embed message
     const MSG = new EmbedBuilder();
     MSG.setColor(color);
     MSG.setURL(url);
+    ///////EMBED TITLE, IMAGE, FIELDS ////////
     MSG.setTitle(` ${emojititle} **${conf.sales.message}**`);
     MSG.setThumbnail(gifurl);
     MSG.setImage(imageurl);
@@ -28,14 +30,20 @@ async function sendWH(longitud, username, product, price, channel, url, url_info
       MSG.addFields({ name: conf.fields.packages, value: product, inline: false });
     } else { MSG.addFields({ name: conf.fields.package, value: product, inline: false }); }
     ////////////////////////////////
+    // Timestamp and Footer
     MSG.setTimestamp();
+    // Footer with or without URL
     if (url_infooter == true) {
       MSG.setFooter({ text: `${conf.footer.text} ${url.replace('https://', '').replace('http://', '')}` });
     } else { MSG.setFooter({ text: conf.footer.text }); }
+    // Send the embed to the channel
     channel
       .send({ embeds: [MSG] })
       .then(function (message) { message.react(emojireact); })
-      .catch(function () { /*Something*/ });
+      .catch(function () { 
+        logger.info('Error: ' + err)
+        console.log(err);
+       });
   } catch (err) {
     logger.info('Error: ' + err)
     console.log(err);
