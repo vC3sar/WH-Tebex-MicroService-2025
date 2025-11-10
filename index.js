@@ -15,6 +15,8 @@ const type_req = require("./handlers/type_request.js");
 const validfrom = require("./handlers/from.js");
 const { autoTranslate } = require("./functions/translate.js");
 const { createFeatures } = require("./functions/create_features.js");
+const ip = require("ip").address();
+
 //// LOGS SYSTEM ////
 const logger = winston.createLogger({
   level: "info",
@@ -185,7 +187,7 @@ client.on("ready", () => {
 
   app.listen(port);
   console.log(
-    `${colors.yellow("5. Running on ")} ${colors.green("server port " + port)}`
+    `${colors.yellow("5. Running on ")} ${colors.green(` ${ip}:${port} `)}`
   );
   logger.info("App its works.");
 });
