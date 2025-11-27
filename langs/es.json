@@ -1,0 +1,19 @@
+{
+  "sales": {
+    "message": "Nueva venta"
+  },
+  "fields": {
+    "name": "Usuario:",
+    "valuetotal": "Valor Total:",
+    "getbygiftcard": "Este producto fue adquirido con una GiftCard!",
+    "packages": "Paquetes adquiridos:",
+    "package": "Paquete adquirido:",
+    "servidor": "Servidor"
+  },
+  "footer": {
+    "text": "Adquiere rangos y mucho más en"
+  },
+  "messages": {
+    "getchannel": "Canal de ventas obtenido correctamente:"
+  }
+}

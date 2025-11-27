@@ -64,6 +64,7 @@ if (fs.existsSync("./langs/" + language + ".json")) {
   console.log(`${colors.cyan(`language loaded: ${language}`)}`);
   conf = require("./langs/" + language + ".json");
 } else {
+  console.log(colors.bgRed("Restart the bot to apply changes"));
   autoTranslate("./langs/spanish.json", language);
   status = 1;
 }
@@ -92,7 +93,9 @@ if (debug == true) {
   console.log(colors.gray("Debug mode is enabled!"));
   client.on("messageCreate", (message) => {
     if (message.author.bot) return;
-    console.log(`${message.author.username}: ${message.content}`);
+    console.log(
+      `CHAT: ${message.author.username} : ${colors.white(message.content)}`
+    );
   });
 }
 ///////////////////////////////
