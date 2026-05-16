@@ -171,7 +171,9 @@ async function start() {
         return res.status(400).json({ error: "Webhook payload is missing products", requestId });
       }
 
-      if (eventId) {
+      if (debug === true) {
+        logger.info("debug mode bypassed duplicate check", { requestId, eventId });
+      } else if (eventId) {
         if (!claimEvent(eventId)) {
           incrementMetric("webhook_duplicates_total");
           logger.info(`duplicate webhook skipped eventId=${eventId}`, { requestId });

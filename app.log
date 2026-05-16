@@ -836,3 +836,115 @@ warn: Could not react to Discord message: Unknown Emoji {"timestamp":"2026-05-16
 2026-05-16T02:55:00.252Z info requestId=283175e2-d640-43e5-ad96-cc06d963f774 debug webhook passed to next middleware
 2026-05-16T02:55:00.280Z info requestId=565ead3d-e31b-4ef0-ace3-8dda7b634f4c GET /favicon.ico
 2026-05-16T02:55:00.280Z info requestId=565ead3d-e31b-4ef0-ace3-8dda7b634f4c debug webhook passed to next middleware
+2026-05-16T02:59:41.320Z info debug mode enabled
+2026-05-16T02:59:44.376Z info HTTP server listening on 25500
+2026-05-16T03:08:54.212Z info requestId=dc56f6e0-5608-4774-8d72-5d5e436d0569 GET /healthz
+2026-05-16T03:08:54.213Z info requestId=dc56f6e0-5608-4774-8d72-5d5e436d0569 debug webhook passed to next middleware
+2026-05-16T03:08:54.273Z info requestId=97e63fc3-c5a9-49a6-9170-b56294a46eda GET /favicon.ico
+2026-05-16T03:08:54.274Z info requestId=97e63fc3-c5a9-49a6-9170-b56294a46eda debug webhook passed to next middleware
+2026-05-16T03:08:54.773Z info requestId=4292e8d7-f63c-4f0e-a671-f64304fb0e35 GET /healthz
+2026-05-16T03:08:54.774Z info requestId=4292e8d7-f63c-4f0e-a671-f64304fb0e35 debug webhook passed to next middleware
+2026-05-16T03:08:54.805Z info requestId=8eff98bb-8fcb-4793-a8a4-bfb126e66856 GET /favicon.ico
+2026-05-16T03:08:54.805Z info requestId=8eff98bb-8fcb-4793-a8a4-bfb126e66856 debug webhook passed to next middleware
+2026-05-16T03:08:55.395Z info requestId=29672e9d-7075-4dc2-945e-624e53b5cfa1 GET /healthz
+2026-05-16T03:08:55.396Z info requestId=29672e9d-7075-4dc2-945e-624e53b5cfa1 debug webhook passed to next middleware
+2026-05-16T03:08:55.442Z info requestId=77c43862-b27c-4882-99a4-6245b5abce73 GET /favicon.ico
+2026-05-16T03:08:55.443Z info requestId=77c43862-b27c-4882-99a4-6245b5abce73 debug webhook passed to next middleware
+2026-05-16T03:08:56.041Z info requestId=f5b4359c-92b9-4e0d-b155-f7ac63314029 GET /healthz
+2026-05-16T03:08:56.042Z info requestId=f5b4359c-92b9-4e0d-b155-f7ac63314029 debug webhook passed to next middleware
+2026-05-16T03:08:56.068Z info requestId=bf08ef1a-53b4-401a-aa85-9278d18a9a69 GET /favicon.ico
+2026-05-16T03:08:56.068Z info requestId=bf08ef1a-53b4-401a-aa85-9278d18a9a69 debug webhook passed to next middleware
+2026-05-16T03:08:56.436Z info requestId=65680d6d-ccdb-4f64-9850-3407dfc68f5b GET /healthz
+2026-05-16T03:08:56.437Z info requestId=65680d6d-ccdb-4f64-9850-3407dfc68f5b debug webhook passed to next middleware
+2026-05-16T03:08:56.465Z info requestId=a4dd42d6-6161-4613-94a5-148e333356de GET /favicon.ico
+2026-05-16T03:08:56.466Z info requestId=a4dd42d6-6161-4613-94a5-148e333356de debug webhook passed to next middleware
+2026-05-16T03:08:56.776Z info requestId=e8dd2e94-b995-4e0e-aeec-a5a6d24cacbd GET /healthz
+2026-05-16T03:08:56.776Z info requestId=e8dd2e94-b995-4e0e-aeec-a5a6d24cacbd debug webhook passed to next middleware
+2026-05-16T03:08:56.805Z info requestId=496f5cb6-7d4b-4050-ac16-f0945d362e28 GET /favicon.ico
+2026-05-16T03:08:56.805Z info requestId=496f5cb6-7d4b-4050-ac16-f0945d362e28 debug webhook passed to next middleware
+2026-05-16T03:08:57.259Z info requestId=9b34fa94-1489-4678-9fc6-b05070152854 GET /healthz
+2026-05-16T03:08:57.259Z info requestId=9b34fa94-1489-4678-9fc6-b05070152854 debug webhook passed to next middleware
+2026-05-16T03:08:57.289Z info requestId=86235996-fda6-4f20-a4c3-5adc27f819c4 GET /favicon.ico
+2026-05-16T03:08:57.290Z info requestId=86235996-fda6-4f20-a4c3-5adc27f819c4 debug webhook passed to next middleware
+2026-05-16T03:08:57.724Z info requestId=81afe3e2-f9b1-4f79-9f82-a5e46ee4e498 GET /healthz
+2026-05-16T03:08:57.725Z info requestId=81afe3e2-f9b1-4f79-9f82-a5e46ee4e498 debug webhook passed to next middleware
+2026-05-16T03:08:57.757Z info requestId=1a0df24b-af75-4cfd-9c9d-5c66434a9269 GET /favicon.ico
+2026-05-16T03:08:57.757Z info requestId=1a0df24b-af75-4cfd-9c9d-5c66434a9269 debug webhook passed to next middleware
+2026-05-16T03:08:58.236Z info requestId=162a0091-7a02-41de-b155-4eab0de3f66d GET /healthz
+2026-05-16T03:08:58.236Z info requestId=162a0091-7a02-41de-b155-4eab0de3f66d debug webhook passed to next middleware
+2026-05-16T03:08:58.261Z info requestId=aed46712-a4fc-47ca-b062-81d2f407fcc6 GET /favicon.ico
+2026-05-16T03:08:58.262Z info requestId=aed46712-a4fc-47ca-b062-81d2f407fcc6 debug webhook passed to next middleware
+2026-05-16T03:09:29.822Z info requestId=21204504-5e98-4a00-82f5-1f1a182a6de1 GET /healthz
+2026-05-16T03:09:29.822Z info requestId=21204504-5e98-4a00-82f5-1f1a182a6de1 debug webhook passed to next middleware
+2026-05-16T03:09:29.856Z info requestId=76dc475f-d8e6-4c12-a910-1a8769a38ed6 GET /favicon.ico
+2026-05-16T03:09:29.857Z info requestId=76dc475f-d8e6-4c12-a910-1a8769a38ed6 debug webhook passed to next middleware
+2026-05-16T03:09:30.562Z info requestId=34c72d97-263e-45b4-b279-72d346c6b70e GET /healthz
+2026-05-16T03:09:30.563Z info requestId=34c72d97-263e-45b4-b279-72d346c6b70e debug webhook passed to next middleware
+2026-05-16T03:09:30.599Z info requestId=b51a1749-016a-434e-8207-100eded6ff86 GET /favicon.ico
+2026-05-16T03:09:30.600Z info requestId=b51a1749-016a-434e-8207-100eded6ff86 debug webhook passed to next middleware
+2026-05-16T03:09:30.853Z info requestId=43f91983-6d58-4389-a49c-319b938ff62c GET /healthz
+2026-05-16T03:09:30.853Z info requestId=43f91983-6d58-4389-a49c-319b938ff62c debug webhook passed to next middleware
+2026-05-16T03:09:30.885Z info requestId=39574ccb-f89a-4b85-9e8b-fcf58ebf68b0 GET /favicon.ico
+2026-05-16T03:09:30.886Z info requestId=39574ccb-f89a-4b85-9e8b-fcf58ebf68b0 debug webhook passed to next middleware
+2026-05-16T03:09:31.082Z info requestId=27ef8ef3-b8d3-4e02-a645-b04a7e8ee7b2 GET /healthz
+2026-05-16T03:09:31.082Z info requestId=27ef8ef3-b8d3-4e02-a645-b04a7e8ee7b2 debug webhook passed to next middleware
+2026-05-16T03:09:31.109Z info requestId=2aff56f3-a269-4e35-85c9-6e9cfbf3e458 GET /favicon.ico
+2026-05-16T03:09:31.110Z info requestId=2aff56f3-a269-4e35-85c9-6e9cfbf3e458 debug webhook passed to next middleware
+2026-05-16T03:09:31.298Z info requestId=b3543e01-1b79-48e5-b6b7-5092d5ea8d5d GET /healthz
+2026-05-16T03:09:31.299Z info requestId=b3543e01-1b79-48e5-b6b7-5092d5ea8d5d debug webhook passed to next middleware
+2026-05-16T03:09:31.327Z info requestId=b0296c2c-759a-4a01-815f-15ed68d7356b GET /favicon.ico
+2026-05-16T03:09:31.328Z info requestId=b0296c2c-759a-4a01-815f-15ed68d7356b debug webhook passed to next middleware
+2026-05-16T03:09:31.508Z info requestId=6c597235-8d6a-41e9-afbf-5488e49329ac GET /healthz
+2026-05-16T03:09:31.509Z info requestId=6c597235-8d6a-41e9-afbf-5488e49329ac debug webhook passed to next middleware
+2026-05-16T03:09:31.540Z info requestId=dfca473a-089f-446e-9d75-24c0fa6f37db GET /favicon.ico
+2026-05-16T03:09:31.541Z info requestId=dfca473a-089f-446e-9d75-24c0fa6f37db debug webhook passed to next middleware
+2026-05-16T03:09:31.724Z info requestId=83265829-51af-44eb-8a16-dbd57626ffba GET /healthz
+2026-05-16T03:09:31.725Z info requestId=83265829-51af-44eb-8a16-dbd57626ffba debug webhook passed to next middleware
+2026-05-16T03:09:31.752Z info requestId=d50faec3-cdae-4878-ab87-65616b3e5f9e GET /favicon.ico
+2026-05-16T03:09:31.753Z info requestId=d50faec3-cdae-4878-ab87-65616b3e5f9e debug webhook passed to next middleware
+2026-05-16T03:09:31.945Z info requestId=b0da5a29-b5b1-4ca5-a827-023807bd500f GET /healthz
+2026-05-16T03:09:31.945Z info requestId=b0da5a29-b5b1-4ca5-a827-023807bd500f debug webhook passed to next middleware
+2026-05-16T03:09:31.979Z info requestId=8e0d726c-2f21-49e3-b0b1-4df15375495e GET /favicon.ico
+2026-05-16T03:09:31.979Z info requestId=8e0d726c-2f21-49e3-b0b1-4df15375495e debug webhook passed to next middleware
+2026-05-16T03:09:32.325Z info requestId=0a47da0d-64cb-4151-8bc3-d54f67b684d9 GET /healthz
+2026-05-16T03:09:32.325Z info requestId=0a47da0d-64cb-4151-8bc3-d54f67b684d9 debug webhook passed to next middleware
+2026-05-16T03:09:32.354Z info requestId=c25079a6-3b9c-4f89-be8b-0b35413b0ccd GET /favicon.ico
+2026-05-16T03:09:32.354Z info requestId=c25079a6-3b9c-4f89-be8b-0b35413b0ccd debug webhook passed to next middleware
+2026-05-16T03:09:32.561Z info requestId=111508f1-276b-45ef-b84f-55d3e4d585ba GET /healthz
+2026-05-16T03:09:32.562Z info requestId=111508f1-276b-45ef-b84f-55d3e4d585ba debug webhook passed to next middleware
+2026-05-16T03:09:32.592Z info requestId=c9711b78-b54e-4873-8745-e3ddd8ec882f GET /favicon.ico
+2026-05-16T03:09:32.593Z info requestId=c9711b78-b54e-4873-8745-e3ddd8ec882f debug webhook passed to next middleware
+2026-05-16T03:09:32.775Z info requestId=51a08cec-880b-4f96-847e-d0a8789bf0b4 GET /healthz
+2026-05-16T03:09:32.776Z info requestId=51a08cec-880b-4f96-847e-d0a8789bf0b4 debug webhook passed to next middleware
+2026-05-16T03:09:32.805Z info requestId=86b35d51-465e-4d8a-ab90-bb8535efbd3a GET /favicon.ico
+2026-05-16T03:09:32.805Z info requestId=86b35d51-465e-4d8a-ab90-bb8535efbd3a debug webhook passed to next middleware
+2026-05-16T03:09:32.977Z info requestId=ec7f68bf-1b16-488e-87fd-0dad7c0a5e12 GET /healthz
+2026-05-16T03:09:32.978Z info requestId=ec7f68bf-1b16-488e-87fd-0dad7c0a5e12 debug webhook passed to next middleware
+2026-05-16T03:09:33.008Z info requestId=72669313-b45a-4574-93cf-edd93996bc49 GET /favicon.ico
+2026-05-16T03:09:33.009Z info requestId=72669313-b45a-4574-93cf-edd93996bc49 debug webhook passed to next middleware
+2026-05-16T03:09:33.161Z info requestId=51312d12-d418-4722-9a72-7e27b45f6259 GET /healthz
+2026-05-16T03:09:33.161Z info requestId=51312d12-d418-4722-9a72-7e27b45f6259 debug webhook passed to next middleware
+2026-05-16T03:09:33.193Z info requestId=142f214d-069c-4dfc-81a9-8f33ac8cc482 GET /favicon.ico
+2026-05-16T03:09:33.193Z info requestId=142f214d-069c-4dfc-81a9-8f33ac8cc482 debug webhook passed to next middleware
+2026-05-16T03:09:37.976Z info requestId=265b56e3-54d4-426a-a7e6-175769a18b55 POST /
+2026-05-16T03:09:38.010Z info requestId=265b56e3-54d4-426a-a7e6-175769a18b55 debug webhook passed to next middleware
+2026-05-16T03:09:38.011Z info requestId=265b56e3-54d4-426a-a7e6-175769a18b55 webhook source ip=127.0.0.1
+2026-05-16T03:09:38.011Z info requestId=265b56e3-54d4-426a-a7e6-175769a18b55 debug webhook ip=127.0.0.1
+2026-05-16T03:09:38.012Z info requestId=265b56e3-54d4-426a-a7e6-175769a18b55 webhook accepted ip=127.0.0.1
+2026-05-16T03:09:38.018Z info requestId=265b56e3-54d4-426a-a7e6-175769a18b55 Canal de ventas obtenido correctamente: 1441894456780390473
+2026-05-16T03:09:38.884Z warn requestId=265b56e3-54d4-426a-a7e6-175769a18b55 Could not react to Discord message: Unknown Emoji
+2026-05-16T03:09:49.984Z info requestId=98cfac7d-5c23-4d52-a8b7-f7204a1a4431 POST /
+2026-05-16T03:09:49.986Z info requestId=98cfac7d-5c23-4d52-a8b7-f7204a1a4431 debug webhook passed to next middleware
+2026-05-16T03:09:49.986Z info requestId=98cfac7d-5c23-4d52-a8b7-f7204a1a4431 webhook source ip=127.0.0.1
+2026-05-16T03:09:49.987Z info requestId=98cfac7d-5c23-4d52-a8b7-f7204a1a4431 debug webhook ip=127.0.0.1
+2026-05-16T03:09:49.987Z info requestId=98cfac7d-5c23-4d52-a8b7-f7204a1a4431 webhook accepted ip=127.0.0.1
+2026-05-16T03:09:49.988Z info requestId=98cfac7d-5c23-4d52-a8b7-f7204a1a4431 duplicate webhook skipped eventId=tbx-49616925a1155-0a4f2d
+2026-05-16T03:10:10.607Z info debug mode enabled
+2026-05-16T03:10:12.598Z info HTTP server listening on 25500
+2026-05-16T03:10:13.949Z info requestId=a9e5e01a-5768-4f3f-8de1-df814de12291 POST /
+2026-05-16T03:10:13.965Z info requestId=a9e5e01a-5768-4f3f-8de1-df814de12291 debug webhook passed to next middleware
+2026-05-16T03:10:13.967Z info requestId=a9e5e01a-5768-4f3f-8de1-df814de12291 webhook source ip=127.0.0.1
+2026-05-16T03:10:13.967Z info requestId=a9e5e01a-5768-4f3f-8de1-df814de12291 debug webhook ip=127.0.0.1
+2026-05-16T03:10:13.968Z info requestId=a9e5e01a-5768-4f3f-8de1-df814de12291 webhook accepted ip=127.0.0.1
+2026-05-16T03:10:13.972Z info requestId=a9e5e01a-5768-4f3f-8de1-df814de12291 Canal de ventas obtenido correctamente: 1441894456780390473
+2026-05-16T03:10:14.595Z warn requestId=a9e5e01a-5768-4f3f-8de1-df814de12291 Could not react to Discord message: Unknown Emoji
