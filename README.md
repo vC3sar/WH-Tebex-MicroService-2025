@@ -1,6 +1,53 @@
 # WH-Tebex-MicroService
 
-Microservicio Node.js que recibe webhooks de Tebex, valida el origen, deduplica eventos repetidos y publica compras en un canal de Discord con embeds legibles para administradores y usuarios.
+Microservicio Node.js que recibe webhooks de Tebex, valida el origen, deduplica eventos repetidos y publica compras en Discord con embebidos legibles.
+
+## Comandos Tebex
+
+| Comando | Uso | Resultado |
+|---|---|---|
+| `!tbxuser <nick\|uuid>` | Consulta un usuario Tebex | Muestra perfil, pagos paginados y selector de pagos |
+| `!tbxcheck <tbx-id>` | Consulta un pago específico | Devuelve el detalle completo del pago |
+
+### Ejemplo rápido
+
+```bash
+!tbxuser Notch
+!tbxcheck 1234567890
+```
+
+## Ejemplo de configuración
+
+```json
+{
+  "showServer": false,
+  "debug": false,
+  "defPort": 25500,
+  "token": "DISCORD_BOT_TOKEN",
+  "shopchannelID": "123456789012345678",
+  "language": "es",
+  "embed": {
+    "url": "https://tienda.ejemplo.com",
+    "url_infooter": true,
+    "gifurl": "https://cdn.ejemplo.com/banner.png",
+    "imageurl": "https://cdn.ejemplo.com/embed.png",
+    "emojititle": "<:Tienda:000000000000000000>",
+    "emojireact": "<:CHECK:000000000000000000>",
+    "emojicurrency": "<:coin:000000000000000000>",
+    "color": "#0099ff",
+    "emojiproductArrow": "<:linea:000000000000000000> ",
+    "useMCskin": true
+  },
+  "api": {
+    "favicon_url": "https://example.com/favicon.png"
+  },
+  "tebexCheck": {
+    "prefix": "!",
+    "apiKey": "TEBEX_PRIVATE_KEY",
+    "requiredRole": ""
+  }
+}
+```
 
 ## Vista rápida
 
@@ -27,14 +74,6 @@ flowchart TD
     I --> J[Responder 200]
 ```
 
-## Qué resuelve
-
-- Publica la compra en Discord con formato visual claro.
-- Filtra solicitudes no autorizadas por IP.
-- Deduplica reintentos de Tebex para no duplicar anuncios.
-- Expone métricas básicas para monitoreo.
-- Genera un `requestId` por request para depuración.
-
 ## Requisitos
 
 - Node.js 18 o superior.
@@ -45,7 +84,7 @@ flowchart TD
 ## Instalación
 
 1. Crea `config.json` copiando `config.example.json`.
-2. Completa el token, canal, puerto e información del embed.
+2. Completa el token, canal, puerto, Private Key de Tebex y el embed.
 3. Instala dependencias:
 
 ```bash
@@ -99,34 +138,6 @@ node index.js
 | `tebexCheck.prefix` | Prefijo para comandos de consulta |
 | `tebexCheck.apiKey` | Private Key de Tebex para consultar la API |
 | `tebexCheck.requiredRole` | Rol necesario para usar `!tbxuser` y `!tbxcheck` |
-
-## Ejemplo de `config.json`
-
-```json
-{
-  "showServer": false,
-  "debug": false,
-  "defPort": 25500,
-  "token": "DISCORD_BOT_TOKEN",
-  "shopchannelID": "123456789012345678",
-  "language": "es",
-  "embed": {
-    "url": "https://tienda.ejemplo.com",
-    "url_infooter": true,
-    "gifurl": "https://cdn.ejemplo.com/banner.png",
-    "imageurl": "https://cdn.ejemplo.com/embed.png",
-    "emojititle": "<:Tienda:000000000000000000>",
-    "emojireact": "<:CHECK:000000000000000000>",
-    "emojicurrency": "<:coin:000000000000000000>",
-    "color": "#0099ff",
-    "emojiproductArrow": "<:linea:000000000000000000> ",
-    "useMCskin": true
-  },
-  "api": {
-    "favicon_url": "https://example.com/favicon.png"
-  }
-}
-```
 
 ## Configuración de Tebex
 
@@ -187,6 +198,21 @@ Muestra el perfil Tebex del usuario, sus pagos y una paginación por botones.
 
 Muestra el detalle completo de un pago Tebex por ID de transacción.
 
+## Embed visual
+
+El embed actual prioriza lectura rápida para administración y usuarios:
+
+```text
+<emoji título> Compra confirmada
+────────────────────────────
+Cliente: usuario
+Total: $10.00 USD
+Productos:
+➜ Producto A x1 | $5.00
+➜ Producto B x2 | $5.00
+Footer: tienda.ejemplo.com
+```
+
 ## Idempotencia
 
 El servicio guarda los eventos ya procesados en `.data/tebex-idempotency.json`.
@@ -205,28 +231,13 @@ En modo `debug`:
 - se omite la deduplicación
 - se facilita validar el flujo end-to-end
 
-## Embed visual
-
-El embed actual prioriza lectura rápida para administración y usuarios:
-
-```text
-<emoji título> Compra confirmada
-────────────────────────────
-Cliente: usuario
-Total: $10.00 USD
-Productos:
-➜ Producto A x1 | $5.00
-➜ Producto B x2 | $5.00
-Footer: tienda.ejemplo.com
-```
-
 ## Estructura del proyecto
 
 | Ruta | Propósito |
 |---|---|
 | `index.js` | Arranque principal de Discord + Express |
 | `handlers/` | Middlewares de request |
-| `functions/` | Lógica de envío y traducción |
+| `functions/` | Lógica de envío, comandos Tebex y traducción |
 | `lib/` | Validación, logger, métricas e idempotencia |
 | `langs/` | Archivos de idioma |
 
