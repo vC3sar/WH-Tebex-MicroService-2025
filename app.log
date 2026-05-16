@@ -951,3 +951,4 @@ warn: Could not react to Discord message: Unknown Emoji {"timestamp":"2026-05-16
 2026-05-16T03:29:07.215Z info debug mode enabled
 2026-05-16T03:29:08.272Z info HTTP server listening on 25500
 2026-05-16T03:29:21.622Z info chat author=vcesar content=!tbxuser vcesar
+2026-05-16T03:30:27.258Z info chat author=vcesar content=!tbxcheck tbx-72723022a71286-5afb7c
