@@ -948,3 +948,6 @@ warn: Could not react to Discord message: Unknown Emoji {"timestamp":"2026-05-16
 2026-05-16T03:10:13.968Z info requestId=a9e5e01a-5768-4f3f-8de1-df814de12291 webhook accepted ip=127.0.0.1
 2026-05-16T03:10:13.972Z info requestId=a9e5e01a-5768-4f3f-8de1-df814de12291 Canal de ventas obtenido correctamente: 1441894456780390473
 2026-05-16T03:10:14.595Z warn requestId=a9e5e01a-5768-4f3f-8de1-df814de12291 Could not react to Discord message: Unknown Emoji
+2026-05-16T03:29:07.215Z info debug mode enabled
+2026-05-16T03:29:08.272Z info HTTP server listening on 25500
+2026-05-16T03:29:21.622Z info chat author=vcesar content=!tbxuser vcesar

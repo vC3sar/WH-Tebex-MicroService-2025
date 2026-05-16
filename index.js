@@ -5,6 +5,7 @@ const {
   debug,
   defPort,
   embed,
+  tebexCheck,
   token,
   shopchannelID,
   language,
@@ -23,9 +24,16 @@ const {
 const logger = require("./lib/logger.js");
 const { incrementMetric, metrics } = require("./lib/metrics.js");
 const { getWebhookEventId, claimEvent, pruneStore } = require("./lib/idempotency.js");
+const {
+  getCommandPrefix,
+  handleTebexCheckCommand,
+  handleTebexInteraction,
+  handleTebexUserCommand,
+} = require("./functions/tebex_commands.js");
 const { Client, GatewayIntentBits, EmbedBuilder } = require("discord.js");
 const express = require("express");
 const ip = require("ip").address();
+const configTebexCheck = tebexCheck || {};
 
 if (embed.useMCskin === undefined) {
   createFeatures();
@@ -78,11 +86,57 @@ const client = new Client({
 
 if (debug === true) {
   logger.info("debug mode enabled");
-  client.on("messageCreate", (message) => {
-    if (message.author.bot) return;
-    logger.info(`chat author=${message.author.username} content=${message.content}`);
-  });
 }
+
+client.on("messageCreate", async (message) => {
+  if (!message.guild || message.author.bot) {
+    return;
+  }
+
+  if (debug === true) {
+    logger.info(`chat author=${message.author.username} content=${message.content}`);
+  }
+
+  const prefix = getCommandPrefix({ tebexCheck: configTebexCheck });
+  if (!message.content.startsWith(prefix)) {
+    return;
+  }
+
+  const [command, ...args] = message.content.slice(prefix.length).trim().split(/\s+/);
+  if (!command) {
+    return;
+  }
+
+  try {
+    if (command.toLowerCase() === "tbxuser") {
+      await handleTebexUserCommand(message, args, { tebexCheck: configTebexCheck });
+      return;
+    }
+
+    if (command.toLowerCase() === "tbxcheck") {
+      await handleTebexCheckCommand(message, args, { tebexCheck: configTebexCheck });
+    }
+  } catch (err) {
+    logger.error(err.stack || err.message);
+    await message.reply("Ocurrió un error al procesar el comando.");
+  }
+});
+
+client.on("interactionCreate", async (interaction) => {
+  try {
+    await handleTebexInteraction(interaction, { tebexCheck: configTebexCheck });
+  } catch (err) {
+    logger.error(err.stack || err.message);
+    if (interaction.isRepliable()) {
+      const payload = { content: "No se pudo procesar la interacción.", ephemeral: true };
+      if (interaction.replied || interaction.deferred) {
+        await interaction.followUp(payload).catch(() => {});
+      } else {
+        await interaction.reply(payload).catch(() => {});
+      }
+    }
+  }
+});
 
 async function initializeLanguage() {
   if (fs.existsSync(`./langs/${language}.json`)) {

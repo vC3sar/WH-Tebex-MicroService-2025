@@ -92,6 +92,14 @@ node index.js
 |---|---|
 | `api.favicon_url` | Redirige `/favicon.ico` a una URL externa |
 
+### Tebex lookup
+
+| Clave | Propósito |
+|---|---|
+| `tebexCheck.prefix` | Prefijo para comandos de consulta |
+| `tebexCheck.apiKey` | Private Key de Tebex para consultar la API |
+| `tebexCheck.requiredRole` | Rol necesario para usar `!tbxuser` y `!tbxcheck` |
+
 ## Ejemplo de `config.json`
 
 ```json
@@ -165,6 +173,20 @@ Recibe el webhook de Tebex y procesa:
 - rechazo por IP
 - deduplicación por `transaction_id` / `order_id`
 
+## Comandos de Tebex
+
+### `!tbxuser <nick|uuid>`
+
+Muestra el perfil Tebex del usuario, sus pagos y una paginación por botones.
+
+- `Anterior` / `Siguiente` para navegar entre páginas
+- Selector para abrir un pago concreto
+- Respuesta privada para los detalles del pago seleccionado
+
+### `!tbxcheck <tbx-id>`
+
+Muestra el detalle completo de un pago Tebex por ID de transacción.
+
 ## Idempotencia
 
 El servicio guarda los eventos ya procesados en `.data/tebex-idempotency.json`.
@@ -214,6 +236,7 @@ Footer: tienda.ejemplo.com
 - `Webhook sin productos`: Tebex envió un payload vacío o incompleto.
 - No llega a Discord: revisa `shopchannelID`, token y permisos del bot.
 - Mensajes duplicados: el evento ya fue procesado y quedó en el store de idempotencia.
+- `Falta configurar tebexCheck.apiKey.`: no añadiste la Private Key de Tebex al `config.json`.
 
 ## Notas
 

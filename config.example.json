@@ -20,5 +20,10 @@
   "api": {
     "comment": "Is only decorative, you can leave it empty",
     "favicon_url": "https://dunb17ur4ymx4.cloudfront.net/webstore/favicons/eaa71c0baff2ccd3d45c9c0263619b9dcfefe31d.png"
+  },
+  "tebexCheck": {
+    "prefix": "!",
+    "apiKey": "TEBEX_PRIVATE_KEY",
+    "requiredRole": ""
   }
 }
