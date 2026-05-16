@@ -4,3 +4,45 @@ info: App its works. {"timestamp":"2025-11-11T04:50:40.544Z"}
 info: App its works. {"timestamp":"2025-11-11T04:51:17.802Z"}
 info: App its works. {"timestamp":"2025-11-11T04:52:48.295Z"}
 info: App its works. {"timestamp":"2025-11-11T19:52:37.374Z"}
+error: DiscordjsError [TokenInvalid]: An invalid token was provided.
+    at WebSocketManager.connect (C:\Users\vCesar\Downloads\WHTEBEX\WH-Tebex-MicroService-2025\node_modules\.pnpm\discord.js@14.26.4\node_modules\discord.js\src\client\websocket\WebSocketManager.js:140:26)
+    at Client.login (C:\Users\vCesar\Downloads\WHTEBEX\WH-Tebex-MicroService-2025\node_modules\.pnpm\discord.js@14.26.4\node_modules\discord.js\src\client\Client.js:229:21)
+    at Object.<anonymous> (C:\Users\vCesar\Downloads\WHTEBEX\WH-Tebex-MicroService-2025\index.js:159:10)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Module._load (node:internal/modules/cjs/loader:1091:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12)
+    at node:internal/main/run_main_module:28:49 {"timestamp":"2026-05-16T01:55:35.167Z"}
+error: DiscordjsError [TokenInvalid]: An invalid token was provided.
+    at WebSocketManager.connect (C:\Users\vCesar\Downloads\WHTEBEX\WH-Tebex-MicroService-2025\node_modules\.pnpm\discord.js@14.26.4\node_modules\discord.js\src\client\websocket\WebSocketManager.js:140:26)
+    at Client.login (C:\Users\vCesar\Downloads\WHTEBEX\WH-Tebex-MicroService-2025\node_modules\.pnpm\discord.js@14.26.4\node_modules\discord.js\src\client\Client.js:229:21)
+    at Object.<anonymous> (C:\Users\vCesar\Downloads\WHTEBEX\WH-Tebex-MicroService-2025\index.js:159:10)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Module._load (node:internal/modules/cjs/loader:1091:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12)
+    at node:internal/main/run_main_module:28:49 {"timestamp":"2026-05-16T02:03:24.988Z"}
+info: App is running. {"timestamp":"2026-05-16T02:05:10.389Z"}
+info: Request received from: 127.0.0.1 {"timestamp":"2026-05-16T02:05:14.822Z"}
+info: App is running. {"timestamp":"2026-05-16T02:05:39.756Z"}
+info: Request received from: 127.0.0.1 {"timestamp":"2026-05-16T02:05:41.187Z"}
+error: Error sending webhook embed: Error: Discord channel is not available
+    at sendWH (C:\Users\vCesar\Downloads\WHTEBEX\WH-Tebex-MicroService-2025\functions\sendWH.js:41:13)
+    at C:\Users\vCesar\Downloads\WHTEBEX\WH-Tebex-MicroService-2025\index.js:127:13
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {"timestamp":"2026-05-16T02:05:41.362Z"}
+info: App is running. {"timestamp":"2026-05-16T02:06:42.105Z"}
+info: Request received from: 127.0.0.1 {"timestamp":"2026-05-16T02:06:46.735Z"}
+error: Error sending webhook embed: Error: Discord channel is not available
+    at sendWH (C:\Users\vCesar\Downloads\WHTEBEX\WH-Tebex-MicroService-2025\functions\sendWH.js:41:13)
+    at C:\Users\vCesar\Downloads\WHTEBEX\WH-Tebex-MicroService-2025\index.js:127:13
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {"timestamp":"2026-05-16T02:06:47.136Z"}
+info: App is running. {"timestamp":"2026-05-16T02:07:01.607Z"}
+info: Request received from: 127.0.0.1 {"timestamp":"2026-05-16T02:07:03.676Z"}
+error: Error sending webhook embed: Error: Discord channel is not available
+    at sendWH (C:\Users\vCesar\Downloads\WHTEBEX\WH-Tebex-MicroService-2025\functions\sendWH.js:41:13)
+    at C:\Users\vCesar\Downloads\WHTEBEX\WH-Tebex-MicroService-2025\index.js:127:13
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {"timestamp":"2026-05-16T02:07:03.838Z"}
+info: Request received from: 127.0.0.1 {"timestamp":"2026-05-16T02:09:36.269Z"}
+warn: Could not react to Discord message: Unknown Emoji {"timestamp":"2026-05-16T02:09:38.286Z"}

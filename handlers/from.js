@@ -16,7 +16,7 @@ const logger = winston.createLogger({
   ]
 });
 
-const allowedWebhookIps = new Set(['18.209.80.3', '54.87.231.232']);
+const allowedWebhookIps = new Set(['18.209.80.3', '54.87.231.232', '::ffff:127.0.0.1', '127.0.0.1']);
 
 function normalizeIp(ip) {
   return String(ip || '').replace(/^::ffff:/, '');
