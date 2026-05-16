@@ -22,6 +22,7 @@ const {
 } = require("./lib/check.js");
 const logger = require("./lib/logger.js");
 const { incrementMetric, metrics } = require("./lib/metrics.js");
+const { getWebhookEventId, claimEvent, pruneStore } = require("./lib/idempotency.js");
 const { Client, GatewayIntentBits, EmbedBuilder } = require("discord.js");
 const express = require("express");
 const ip = require("ip").address();
@@ -97,13 +98,14 @@ async function initializeLanguage() {
 async function start() {
   try {
     await initializeLanguage();
+    pruneStore();
   } catch (err) {
     logger.error(err.stack || err.message);
     console.error(colors.red(`BOOT language setup failed: ${err.message}`));
     process.exit(1);
   }
 
-  client.once("ready", () => {
+  client.once("clientReady", () => {
   printStartupSummary({
     language,
     defPort,
@@ -150,6 +152,7 @@ async function start() {
     try {
       const products = req.body?.subject?.products;
       const channel = client.channels.cache.get(shopchannelID) || (await client.channels.fetch(shopchannelID).catch(() => null));
+      const eventId = getWebhookEventId(req.body);
 
       if (!Array.isArray(products) || products.length === 0) {
         incrementMetric("webhook_empty_products_total");
@@ -166,6 +169,16 @@ async function start() {
           footerText: "WH-Tebex MicroService",
         });
         return res.status(400).json({ error: "Webhook payload is missing products", requestId });
+      }
+
+      if (eventId) {
+        if (!claimEvent(eventId)) {
+          incrementMetric("webhook_duplicates_total");
+          logger.info(`duplicate webhook skipped eventId=${eventId}`, { requestId });
+          return res.status(200).json({ ok: true, duplicate: true, requestId, eventId });
+        }
+      } else {
+        logger.warn("webhook missing dedupe id", { requestId });
       }
 
       const customerName = req.body?.subject?.customer?.username?.username || "unknown";
