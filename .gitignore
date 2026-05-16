@@ -12,3 +12,5 @@ app.log.zip.clean.txt
 *.zip.clean
 *.zip.clean.txt
 *.txt
+.gitignore
+.github
