@@ -4,3 +4,4 @@ config.json
 .npm/
 .npm/*
 .data/
+app.log
