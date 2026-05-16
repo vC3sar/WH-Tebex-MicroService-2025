@@ -52,7 +52,7 @@ El código también incluye una funcionalidad de depuración que se habilita si 
 
 ## Iniciar la Aplicación
 
-Para iniciar la aplicación, se debe ejecutar el comando `node app.js` en la línea de comandos. El bot de Discord y el servidor web comenzarán a funcionar, siempre y cuando se hayan configurado correctamente las variables necesarias y las dependencias estén instaladas.
+Para iniciar la aplicación, se debe ejecutar el comando `node index.js` en la línea de comandos. El bot de Discord y el servidor web comenzarán a funcionar, siempre y cuando se hayan configurado correctamente las variables necesarias y las dependencias estén instaladas.
 
 Es importante recordar que la aplicación necesita acceso al token del bot de Discord y a los canales de Discord especificados para funcionar correctamente. Además, asegúrate de que el archivo `config.json` esté correctamente configurado y que todos los módulos necesarios estén instalados antes de iniciar la aplicación.
 
