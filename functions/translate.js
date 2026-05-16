@@ -1,20 +1,35 @@
 const fs = require("fs");
-const { autoTranslate } = require("./../functions/translate_service.js"); // Import the new translation service
+const { autoTranslate } = require("./../functions/translate_service.js");
 const colors = require("colors");
 
 async function translateJSON(json, targetLanguage) {
-  const translatedJSON = {};
-  for (let key in json) {
-    if (typeof json[key] === "object") {
-      translatedJSON[key] = await translateJSON(json[key], targetLanguage);
-    } else {
-      // call translation function
-      const translation = await autoTranslate(json[key], {
-        to: targetLanguage,
-      });
-      translatedJSON[key] = translation.text; // autoTranslate returns { text, from, to }
+  if (Array.isArray(json)) {
+    const translatedArray = [];
+
+    for (const item of json) {
+      translatedArray.push(await translateJSON(item, targetLanguage));
     }
+
+    return translatedArray;
   }
+
+  if (json === null || typeof json !== "object") {
+    const translation = await autoTranslate(String(json), {
+      to: targetLanguage,
+    });
+
+    return translation.text;
+  }
+
+  const translatedJSON = {};
+
+  for (const [key, value] of Object.entries(json)) {
+    translatedJSON[key] =
+      value !== null && typeof value === "object"
+        ? await translateJSON(value, targetLanguage)
+        : (await autoTranslate(String(value), { to: targetLanguage })).text;
+  }
+
   return translatedJSON;
 }
 
@@ -25,6 +40,7 @@ module.exports.autoTranslate = async function (jsonFile, targetLanguage) {
     const translatedJSON = await translateJSON(originalJSON, targetLanguage);
     const outputFile = `./langs/${targetLanguage}.json`;
 
+    await fs.promises.mkdir("./langs", { recursive: true });
     await fs.promises.writeFile(
       outputFile,
       JSON.stringify(translatedJSON, null, 2)

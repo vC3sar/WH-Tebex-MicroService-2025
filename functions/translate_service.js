@@ -115,7 +115,7 @@ const languages = {
 
 
 function isSupported(lang) {
-  return languages.hasOwnProperty(lang)
+  return Object.prototype.hasOwnProperty.call(languages, lang)
 }
 
 async function autoTranslate(text, opts = {}) {
@@ -143,7 +143,7 @@ async function autoTranslate(text, opts = {}) {
   try {
     const { body } = await got(url, { searchParams, responseType: "json" })
 
-    const translated = body[0].map(item => item[0]).join("")
+    const translated = body[0].map((item) => item[0]).join("")
     const detectedSource = body[2] || from
 
     return { text: translated, from: detectedSource, to }

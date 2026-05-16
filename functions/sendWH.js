@@ -1,4 +1,5 @@
 const winston = require('winston');
+
 const logger = winston.createLogger({
   level: 'info',
   format: winston.format.combine(
@@ -10,45 +11,71 @@ const logger = winston.createLogger({
     new winston.transports.Console()
   ]
 });
-async function sendWH(longitud, username, product, price, channel, url, url_infooter, color, emojititle, emojireact, gifurl, imageurl, conf, EmbedBuilder) {
-  try {
-    console.log(product);
-    // Create the embed message
-    const MSG = new EmbedBuilder();
-    MSG.setColor(color);
-    MSG.setURL(url);
-    ///////EMBED TITLE, IMAGE, FIELDS ////////
-    MSG.setTitle(` ${emojititle} **${conf.sales.message}**`);
-    MSG.setThumbnail(gifurl);
-    MSG.setImage(imageurl);
-    MSG.addFields({ name: conf.fields.name, value: username, inline: true });
-    ////////EMBED PRICE SELL////////
-    if (parseInt(price) > 0.1) {
-      MSG.addFields({ name: conf.fields.valuetotal, value: price, inline: true });
-    } else { MSG.addFields({ name: conf.fields.valuetotal, value: conf.fields.getbygiftcard, inline: true }); }
-    if (longitud > 1) {
-      MSG.addFields({ name: conf.fields.packages, value: product, inline: false });
-    } else { MSG.addFields({ name: conf.fields.package, value: product, inline: false }); }
-    ////////////////////////////////
-    // Timestamp and Footer
-    MSG.setTimestamp();
-    // Footer with or without URL
-    if (url_infooter == true) {
-      MSG.setFooter({ text: `${conf.footer.text} ${url.replace('https://', '').replace('http://', '')}` });
-    } else { MSG.setFooter({ text: conf.footer.text }); }
-    // Send the embed to the channel
-    channel
-      .send({ embeds: [MSG] })
-      .then(function (message) { message.react(emojireact); })
-      .catch(function () { 
-        logger.info('Error: ' + err)
-        console.log(err);
-       });
-  } catch (err) {
-    logger.info('Error: ' + err)
-    console.log(err);
-  }
 
+function normalizeFooterUrl(value) {
+  try {
+    return new URL(value).hostname;
+  } catch {
+    return String(value).replace(/^https?:\/\//, '');
+  }
+}
+
+async function sendWH(
+  longitud,
+  username,
+  product,
+  price,
+  channel,
+  url,
+  url_infooter,
+  color,
+  emojititle,
+  emojireact,
+  gifurl,
+  imageurl,
+  conf,
+  EmbedBuilder
+) {
+  try {
+    if (!channel || typeof channel.send !== 'function') {
+      throw new Error('Discord channel is not available');
+    }
+
+    const embed = new EmbedBuilder();
+    const parsedPrice = Number.parseFloat(price);
+
+    embed.setColor(color);
+    embed.setURL(url);
+    embed.setTitle(` ${emojititle} **${conf.sales.message}**`);
+    embed.setThumbnail(gifurl);
+    embed.setImage(imageurl);
+    embed.addFields({ name: conf.fields.name, value: username, inline: true });
+
+    if (Number.isFinite(parsedPrice) && parsedPrice > 0.1) {
+      embed.addFields({ name: conf.fields.valuetotal, value: price, inline: true });
+    } else {
+      embed.addFields({ name: conf.fields.valuetotal, value: conf.fields.getbygiftcard, inline: true });
+    }
+
+    embed.addFields({
+      name: longitud > 1 ? conf.fields.packages : conf.fields.package,
+      value: product,
+      inline: false
+    });
+
+    embed.setTimestamp();
+    embed.setFooter({
+      text: url_infooter ? `${conf.footer.text} ${normalizeFooterUrl(url)}` : conf.footer.text
+    });
+
+    const message = await channel.send({ embeds: [embed] });
+    await message.react(emojireact).catch((reactionError) => {
+      logger.warn(`Could not react to Discord message: ${reactionError.message}`);
+    });
+  } catch (err) {
+    logger.error(`Error sending webhook embed: ${err.stack || err.message}`);
+    console.error(err);
+  }
 }
 
 module.exports.sendWH = sendWH;
