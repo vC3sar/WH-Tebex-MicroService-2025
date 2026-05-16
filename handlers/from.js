@@ -6,6 +6,7 @@ const logger = require('../lib/logger.js');
 const { incrementMetric } = require('../lib/metrics.js');
 
 const allowedWebhookIps = new Set(['18.209.80.3', '54.87.231.232', '127.0.0.1', '::ffff:127.0.0.1']);
+const publicPaths = new Set(['/healthz', '/metrics']);
 
 function normalizeIp(ip) {
   return String(ip || '').replace(/^::ffff:/, '');
@@ -16,6 +17,11 @@ function getClientIP(req) {
 }
 
 router.use('/', function (req, res, next) {
+  if (publicPaths.has(req.path)) {
+    next();
+    return;
+  }
+
   if (req.path === '/favicon.ico' && api?.favicon_url) {
     return res.redirect(api.favicon_url);
   }
