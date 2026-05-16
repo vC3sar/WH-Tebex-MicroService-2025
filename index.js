@@ -1,6 +1,6 @@
 const fs = require("fs");
+const { randomUUID } = require("crypto");
 const colors = require("colors");
-const winston = require("winston");
 const {
   debug,
   defPort,
@@ -14,25 +14,22 @@ const type_req = require("./handlers/type_request.js");
 const validfrom = require("./handlers/from.js");
 const { autoTranslate } = require("./functions/translate.js");
 const { createFeatures } = require("./functions/create_features.js");
-const { sendWH } = require("./functions/sendWH.js");
-const { cc } = require("./lib/check.js");
+const { sendErrorWH, sendWH } = require("./functions/sendWH.js");
+const {
+  printAvailableLanguages,
+  printStartupSummary,
+  validateRuntimeConfig,
+} = require("./lib/check.js");
+const logger = require("./lib/logger.js");
+const { incrementMetric, metrics } = require("./lib/metrics.js");
 const { Client, GatewayIntentBits, EmbedBuilder } = require("discord.js");
 const express = require("express");
 const ip = require("ip").address();
 
-const logger = winston.createLogger({
-  level: "info",
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.simple()
-  ),
-  transports: [
-    new winston.transports.File({ filename: "app.log", level: "info" }),
-    new winston.transports.Console(),
-  ],
-});
-
-if (embed.useMCskin === undefined) createFeatures();
+if (embed.useMCskin === undefined) {
+  createFeatures();
+  embed.useMCskin = true;
+}
 
 const emojititle = embed.emojititle;
 const emojireact = embed.emojireact;
@@ -45,20 +42,29 @@ const color = embed.color;
 const emojiproductArrow = embed.emojiproductArrow;
 const discordJsVersion = require("./package.json").dependencies["discord.js"].replace("^", "");
 
+try {
+  validateRuntimeConfig({
+    token,
+    shopchannelID,
+    url,
+    defPort,
+    emojititle,
+    emojireact,
+    emojicurrency,
+    gifurl,
+    language,
+    url_infooter,
+  });
+} catch (err) {
+  logger.error(err.message);
+  console.error(colors.red(`BOOT config error: ${err.message}`));
+  if (String(err.message).includes('language')) {
+    printAvailableLanguages();
+  }
+  process.exit(1);
+}
+
 let conf;
-cc(
-  debug,
-  defPort,
-  emojititle,
-  emojireact,
-  emojicurrency,
-  token,
-  shopchannelID,
-  language,
-  gifurl,
-  url,
-  url_infooter
-);
 
 const client = new Client({
   intents: [
@@ -70,59 +76,113 @@ const client = new Client({
 });
 
 if (debug === true) {
-  console.log(colors.gray("Debug mode is enabled!"));
+  logger.info("debug mode enabled");
   client.on("messageCreate", (message) => {
     if (message.author.bot) return;
-    console.log(`CHAT: ${message.author.username} : ${colors.white(message.content)}`);
+    logger.info(`chat author=${message.author.username} content=${message.content}`);
   });
 }
 
-if (fs.existsSync(`./langs/${language}.json`)) {
-  console.log(colors.cyan(`language loaded: ${language}`));
+async function initializeLanguage() {
+  if (fs.existsSync(`./langs/${language}.json`)) {
+    conf = require(`./langs/${language}.json`);
+    return;
+  }
+
+  await autoTranslate("./langs/spanish.json", language);
   conf = require(`./langs/${language}.json`);
-} else {
-  console.log(colors.bgRed("Restart the bot to apply changes"));
-  void autoTranslate("./langs/spanish.json", language).catch((err) => {
-    logger.error(err.stack || err.message);
-    console.error(colors.red(`Language generation failed: ${err.message}`));
-  });
+  console.log(colors.yellow(`BOOT language generated: ${language}`));
 }
 
-client.once("ready", () => {
-  console.log(colors.yellow("2. Started... "));
-  console.log(colors.green(`3. Logged in as ${client.user.tag}!`));
-  console.log(colors.yellow("4. Running on ") + colors.green(`discord.js v${discordJsVersion}`));
+async function start() {
+  try {
+    await initializeLanguage();
+  } catch (err) {
+    logger.error(err.stack || err.message);
+    console.error(colors.red(`BOOT language setup failed: ${err.message}`));
+    process.exit(1);
+  }
+
+  client.once("ready", () => {
+  printStartupSummary({
+    language,
+    defPort,
+    discordJsVersion,
+    debug,
+    useMCskin: embed.useMCskin === true || embed.useMCskin === "true",
+    showServer,
+  });
 
   const app = express();
   const port = process.env.PORT || defPort;
 
   app.disable("x-powered-by");
+  app.use((req, res, next) => {
+    const requestId = randomUUID();
+    req.requestId = requestId;
+    res.setHeader("X-Request-Id", requestId);
+    incrementMetric("requests_total");
+    logger.info(`${req.method} ${req.originalUrl}`, { requestId });
+    next();
+  });
   app.use(express.json({ limit: "1mb" }), type_req, validfrom);
   app.use(express.urlencoded({ extended: true }));
+
   app.get("/healthz", (_req, res) => {
-    res.status(200).json({ ok: true });
+    res.status(200).json({
+      ok: true,
+      language: conf ? language : null,
+      uptime_seconds: Math.round(process.uptime()),
+      request_count: metrics.requests_total,
+    });
+  });
+
+  app.get("/metrics", (_req, res) => {
+    res.status(200).json({
+      ...metrics,
+      uptime_seconds: Math.round(process.uptime()),
+    });
   });
 
   app.post("/", async (req, res) => {
+    const requestId = req.requestId;
+
     try {
       const products = req.body?.subject?.products;
+      const channel = client.channels.cache.get(shopchannelID) || (await client.channels.fetch(shopchannelID).catch(() => null));
+
       if (!Array.isArray(products) || products.length === 0) {
-        throw new Error("Webhook payload is missing products");
+        incrementMetric("webhook_empty_products_total");
+        logger.warn("webhook payload missing products", { requestId });
+        await sendErrorWH({
+          channel,
+          EmbedBuilder,
+          requestId,
+          url,
+          gifurl,
+          imageurl,
+          title: "Webhook sin productos",
+          description: "La solicitud llegó correctamente, pero no contenía productos válidos para publicar.",
+          footerText: "WH-Tebex MicroService",
+        });
+        return res.status(400).json({ error: "Webhook payload is missing products", requestId });
       }
 
       const customerName = req.body?.subject?.customer?.username?.username || "unknown";
       const priceAmount = req.body?.subject?.price?.amount;
       const priceCurrency = req.body?.subject?.price?.currency || "";
-      const channel = client.channels.cache.get(shopchannelID) || (await client.channels.fetch(shopchannelID).catch(() => null));
-
-      if (debug === true) {
-        console.log(`${conf.messages.getchannel} ${channel}`);
-      }
-
       const summary = buildProductSummary(products);
       const useMCskin = embed.useMCskin === true || embed.useMCskin === "true";
       const avatarUrl = useMCskin ? `https://mc-heads.net/avatar/${customerName}` : gifurl;
       const totalPrice = `${formatAmount(priceAmount)} **${priceCurrency}** ${emojicurrency}`;
+
+      if (!channel) {
+        throw new Error("Discord channel could not be resolved");
+      }
+
+      if (debug === true && conf?.messages?.getchannel) {
+        logger.info(`${conf.messages.getchannel} ${shopchannelID}`, { requestId });
+      }
 
       await sendWH(
         products.length,
@@ -138,35 +198,34 @@ client.once("ready", () => {
         avatarUrl,
         imageurl,
         conf,
-        EmbedBuilder
+        EmbedBuilder,
+        requestId
       );
 
-      res.status(200).json(req.body);
+      incrementMetric("webhook_accepts_total");
+      return res.status(200).json({ ok: true, requestId });
     } catch (err) {
-      logger.error(err.stack || err.message);
-      console.log(colors.red(`ERROR: ${err.message}`));
-      res.status(500).json({ error: "Internal server error" });
+      incrementMetric("webhook_errors_total");
+      logger.error(err.stack || err.message, { requestId });
+      console.error(colors.red(`ERROR [${requestId}]: ${err.message}`));
+      return res.status(500).json({ error: "Internal server error", requestId });
     }
   });
 
   app.listen(port, () => {
-    console.log(`${colors.yellow("5. Running on ")} ${colors.green(` ${ip}:${port} `)}`);
-    logger.info("App is running.");
+    logger.info(`HTTP server listening on ${port}`);
+    console.log(colors.green(`BOOT http ${ip}:${port}`));
   });
-});
+  });
 
-if (fs.existsSync(`./langs/${language}.json`)) {
   client.login(token).catch((err) => {
     logger.error(err.stack || err.message);
-    console.error(colors.red(`Discord login failed: ${err.message}`));
+    console.error(colors.red(`BOOT discord login failed: ${err.message}`));
+    process.exit(1);
   });
-} else {
-  console.log(
-    colors.red(
-      "ENGINE: The discord bot and web server will not start because the integration language is being processed."
-    )
-  );
 }
+
+start();
 
 function buildProductSummary(products) {
   return products
@@ -180,7 +239,7 @@ function buildProductSummary(products) {
       const servers =
         (product.servers || []).map((server) => server.name).filter(Boolean).join("\n") || "n/a";
 
-      return `${baseLine}\n${conf.messages.servidor}: ${servers}`;
+      return `${baseLine}\n${conf?.messages?.servidor || "Servidor"}: ${servers}`;
     })
     .join("\n");
 }

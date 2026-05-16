@@ -2,21 +2,10 @@ const express = require('express');
 const router = express.Router();
 const colors = require('colors');
 const { debug, api } = require('./../config.json');
-const winston = require('winston');
+const logger = require('../lib/logger.js');
+const { incrementMetric } = require('../lib/metrics.js');
 
-const logger = winston.createLogger({
-  level: 'info',
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.simple()
-  ),
-  transports: [
-    new winston.transports.File({ filename: 'app.log', level: 'info' }),
-    new winston.transports.Console()
-  ]
-});
-
-const allowedWebhookIps = new Set(['18.209.80.3', '54.87.231.232', '::ffff:127.0.0.1', '127.0.0.1']);
+const allowedWebhookIps = new Set(['18.209.80.3', '54.87.231.232', '127.0.0.1', '::ffff:127.0.0.1']);
 
 function normalizeIp(ip) {
   return String(ip || '').replace(/^::ffff:/, '');
@@ -31,20 +20,24 @@ router.use('/', function (req, res, next) {
     return res.redirect(api.favicon_url);
   }
 
+  const requestId = req.requestId;
   const ip = getClientIP(req);
-  logger.info('Request received from: ' + ip);
+  logger.info(`webhook source ip=${ip}`, { requestId });
 
   if (debug) {
-    console.log(colors.gray(`Nueva venta, debug mode on || from: ${ip}`));
+    logger.info(`debug webhook ip=${ip}`, { requestId });
   }
 
   if (allowedWebhookIps.has(ip)) {
+    incrementMetric('webhook_accepts_total');
+    logger.info(`webhook accepted ip=${ip}`, { requestId });
     next();
     return;
   }
 
-  console.log(colors.red(`Bad Request from: ${ip}`));
-  return res.status(403).json({ error: 'Not authorized' });
+  incrementMetric('webhook_rejects_total');
+  logger.warn(`webhook rejected ip=${ip}`, { requestId });
+  return res.status(403).json({ error: 'Not authorized', requestId });
 });
 
 module.exports = router;

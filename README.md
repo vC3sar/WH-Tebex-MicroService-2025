@@ -56,6 +56,8 @@ Para iniciar la aplicación, se debe ejecutar el comando `node index.js` en la l
 
 Es importante recordar que la aplicación necesita acceso al token del bot de Discord y a los canales de Discord especificados para funcionar correctamente. Además, asegúrate de que el archivo `config.json` esté correctamente configurado y que todos los módulos necesarios estén instalados antes de iniciar la aplicación.
 
+También se exponen los endpoints `GET /healthz` y `GET /metrics` para monitoreo básico, y cada request recibe un `X-Request-Id` para correlacionar logs.
+
 ## Notas Finales
 
 Este código es un ejemplo básico de una aplicación que recibe información a través de una solicitud POST y la envía a un canal de Discord. Dependiendo de tus necesidades específicas, es posible que desees agregar más funcionalidades, seguridad y manejo de errores para adaptarlo a tu caso de uso particular.
