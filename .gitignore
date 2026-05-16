@@ -5,3 +5,10 @@ config.json
 .npm/*
 .data/
 app.log
+app.log.zip
+app.log.zip.clean
+app.log.zip.clean.txt
+*.zip
+*.zip.clean
+*.zip.clean.txt
+*.txt
