@@ -1,6 +1,8 @@
 const fs = require("fs");
 const { randomUUID } = require("crypto");
 const colors = require("colors");
+const { loadConfig } = require("./lib/load-config.js");
+const { config, source: configSource } = loadConfig();
 const {
   debug,
   defPort,
@@ -10,7 +12,7 @@ const {
   shopchannelID,
   language,
   showServer,
-} = require("./config.json");
+} = config;
 const type_req = require("./handlers/type_request.js");
 const validfrom = require("./handlers/from.js");
 const { autoTranslate } = require("./functions/translate.js");
@@ -34,6 +36,7 @@ const { Client, GatewayIntentBits, EmbedBuilder } = require("discord.js");
 const express = require("express");
 const ip = require("ip").address();
 const configTebexCheck = tebexCheck || {};
+const isTestMode = process.env.WH_TEST_MODE === "1";
 
 if (embed.useMCskin === undefined) {
   createFeatures();
@@ -86,6 +89,10 @@ const client = new Client({
 
 if (debug === true) {
   logger.info("debug mode enabled");
+  logger.info(`config source ${configSource}`);
+}
+if (debug === true || isTestMode) {
+  logger.info(`boot flags testMode=${isTestMode} configPath=${process.env.WH_CONFIG_PATH || "./config.json"}`);
 }
 
 client.on("messageCreate", async (message) => {
@@ -159,7 +166,7 @@ async function start() {
     process.exit(1);
   }
 
-  client.once("clientReady", () => {
+  const startHttpServer = () => {
   printStartupSummary({
     language,
     defPort,
@@ -285,6 +292,16 @@ async function start() {
     logger.info(`HTTP server listening on ${port}`);
     console.log(colors.green(`BOOT http ${ip}:${port}`));
   });
+  };
+
+  if (isTestMode) {
+    logger.info("test mode active: skipping Discord login and starting HTTP server directly");
+    startHttpServer();
+    return;
+  }
+
+  client.once("clientReady", () => {
+    startHttpServer();
   });
 
   client.login(token).catch((err) => {
