@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { debug } = require('./../config.json');
+const { loadConfig } = require('../lib/load-config.js');
+const { config } = loadConfig();
+const { debug } = config;
 const logger = require('../lib/logger.js');
 const { incrementMetric } = require('../lib/metrics.js');
 
