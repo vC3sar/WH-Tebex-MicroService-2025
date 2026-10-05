@@ -1,5 +1,7 @@
 {
   "scripts": {
+    "start": "node index.js",
+    "setup": "node setup.js",
     "test-build": "node test-build.js"
   },
   "dependencies": {

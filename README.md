@@ -1,256 +1,132 @@
-# WH-Tebex-MicroService
+# 🛒 WH-Tebex-MicroService
 
-Microservicio Node.js que recibe webhooks de Tebex, valida el origen, deduplica eventos repetidos y publica compras en Discord con embebidos legibles.
+Microservicio Node.js robusto, seguro y fácil de usar para recibir webhooks de **Tebex**, validar su origen, evitar notificaciones duplicadas y publicar las compras de forma instantánea en **Discord** con embeds altamente personalizables y profesionales.
 
-## Comandos Tebex
+---
 
-| Comando | Uso | Resultado |
+## ✨ Características Principales
+
+- **Fácil de Configurar**: Asistente interactivo en consola para Linux y Windows (Click to Run).
+- **Integración con Discord**: Notificaciones automáticas de compras con soporte para skins de Minecraft.
+- **Comandos Integrados**: Consulta de perfiles de Tebex y detalles de pagos directamente desde Discord (`!tbxuser`, `!tbxcheck`).
+- **Seguridad y Validación**: Filtro estricto por IPs oficiales de Tebex para evitar falsificaciones.
+- **Idempotencia**: Sistema anti-spam que evita notificaciones repetidas si Tebex reenvía un evento.
+- **Monitorización**: Endpoints de `/healthz` y `/metrics` integrados.
+
+---
+
+## 🚀 Instalación y Uso (Click to Run)
+
+Hemos simplificado la instalación para que no tengas que editar archivos de configuración manualmente.
+
+### Requisitos previos
+- Node.js 18 o superior.
+- Un Bot de Discord y su token.
+- Un servidor de Linux o Windows.
+
+### 🐧 En Linux / Consolas (Bash)
+
+1. Dale permisos de ejecución a los scripts:
+   ```bash
+   chmod +x setup.sh start.sh
+   ```
+2. Ejecuta el **Asistente de Configuración** interactivo:
+   ```bash
+   ./setup.sh
+   ```
+   *El asistente te guiará para introducir tu Token, ID del Canal, Puerto, Clave de Tebex, etc.*
+3. Inicia el servidor:
+   ```bash
+   ./start.sh
+   ```
+
+### 🪟 En Windows
+
+1. Haz doble clic en el archivo **`setup.bat`**. 
+   *Se instalarán las dependencias necesarias y se abrirá el Asistente de Configuración.*
+2. Responde a las preguntas del asistente en la consola.
+3. Haz doble clic en el archivo **`start.bat`** para iniciar el microservicio.
+
+*(Nota: Si lo prefieres, siempre puedes configurar usando el método tradicional de Node: `npm install`, luego `npm run setup` y finalmente `npm start`)*.
+
+---
+
+## 🎮 Comandos de Discord (Tebex Check)
+
+| Comando | Uso | Descripción |
 |---|---|---|
-| `!tbxuser <nick\|uuid>` | Consulta un usuario Tebex | Muestra perfil, pagos paginados y selector de pagos |
-| `!tbxcheck <tbx-id>` | Consulta un pago específico | Devuelve el detalle completo del pago |
+| `!tbxuser <nick\|uuid>` | `!tbxuser Notch` | Consulta un usuario Tebex. Muestra su perfil y un selector paginado con sus compras. |
+| `!tbxcheck <tbx-id>` | `!tbxcheck 1234567890` | Consulta los detalles completos y exactos de un pago específico. |
 
-### Ejemplo rápido
+---
 
-```bash
-!tbxuser Notch
-!tbxcheck 1234567890
-```
+## ⚙️ Configuración (`config.json`)
 
-## Ejemplo de configuración
+Si decides editar la configuración manualmente, estos son los valores disponibles:
 
-```json
-{
-  "showServer": false,
-  "debug": false,
-  "defPort": 25500,
-  "token": "DISCORD_BOT_TOKEN",
-  "shopchannelID": "123456789012345678",
-  "language": "es",
-  "embed": {
-    "url": "https://tienda.ejemplo.com",
-    "url_infooter": true,
-    "gifurl": "https://cdn.ejemplo.com/banner.png",
-    "imageurl": "https://cdn.ejemplo.com/embed.png",
-    "emojititle": "<:Tienda:000000000000000000>",
-    "emojireact": "<:CHECK:000000000000000000>",
-    "emojicurrency": "<:coin:000000000000000000>",
-    "color": "#0099ff",
-    "emojiproductArrow": "<:linea:000000000000000000> ",
-    "useMCskin": true
-  },
-  "api": {
-    "favicon_url": "https://example.com/favicon.png"
-  },
-  "tebexCheck": {
-    "prefix": "!",
-    "apiKey": "TEBEX_PRIVATE_KEY",
-    "requiredRole": ""
-  }
-}
-```
-
-## Vista rápida
-
-| Componente | Función |
+### Principal y Tebex Check
+| Clave | Propósito |
 |---|---|
-| Tebex webhook | Envía eventos de validación y compra |
-| Express | Expone el endpoint HTTP |
-| Discord bot | Publica embeds en el canal configurado |
-| Idempotencia | Evita publicaciones duplicadas |
-| Observabilidad | Expone `X-Request-Id`, `GET /healthz` y `GET /metrics` |
+| `showServer` | `true/false` Muestra u oculta servidores asociados a cada producto. |
+| `debug` | `true/false` Activa logs detallados y desactiva la deduplicación (para pruebas). |
+| `defPort` | Puerto HTTP del servicio (Por defecto: 25577). |
+| `token` | Token del bot de Discord. |
+| `shopchannelID` | ID del Canal donde se enviarán las notificaciones de compras. |
+| `tebexCheck.prefix` | Prefijo para los comandos (Ej: `!`). |
+| `tebexCheck.apiKey` | **Tebex Private Key** para consultar datos. |
+| `tebexCheck.requiredRole`| ID del Rol de Discord requerido para usar los comandos (Déjalo vacío para acceso público). |
 
-## Flujo de la integración
+### Embed de Compras
+| Clave | Propósito |
+|---|---|
+| `embed.url` | URL al hacer clic en el título (Tu Tienda Tebex). |
+| `embed.gifurl` | Banner / GIF superior en la notificación. |
+| `embed.imageurl` | Imagen grande bajo el texto en la notificación. |
+| `embed.color` | Color lateral del Embed (Ej: `#0099ff`). |
+| `embed.useMCskin` | `true/false` Usa la cabeza de Minecraft del comprador como miniatura. |
+| `embed.emojititle` | Emoji para el título de la compra. |
+
+---
+
+## 🔗 Configuración en Tebex
+
+1. Ve al panel de control de tu tienda **Tebex**.
+2. Dirígete a **Integrations -> Webhooks** y añade un nuevo Webhook.
+3. Apunta la URL hacia tu servidor IP/Dominio con el puerto configurado (ej: `http://mi-servidor.com:25577/`).
+4. **IMPORTANTE**: El microservicio está protegido y solo acepta peticiones de las IPs oficiales de Tebex (`18.209.80.3` y `54.87.231.232`). Si usas un proxy inverso como Cloudflare, asegúrate de que esté configurado para pasar la IP real.
+
+---
+
+## 📊 Endpoints de Observabilidad
+
+| Método | Endpoint | Descripción |
+|---|---|---|
+| `GET` | `/healthz` | Devuelve el estado, uptime y contadores básicos del proceso. |
+| `GET` | `/metrics` | Devuelve estadísticas detalladas (webhooks procesados, ignorados, deduplicados y errores). |
+| `POST`| `/` | Endpoint principal que recibe los Webhooks de Tebex. |
+
+---
+
+## 🛠️ Solución de Problemas Comunes
+
+- **`Not authorized` (403)**: La petición no viene de una IP oficial de Tebex. Verifica que no tengas un proxy/firewall alterando la IP de origen.
+- **Webhook sin productos**: Tebex envió un evento de validación o un payload incompleto. Es normal en el primer intento de vinculación.
+- **No llegan mensajes a Discord**: Verifica el `shopchannelID`, que el bot tenga el token correcto y posea permisos de "Ver Canal", "Enviar Mensajes" e "Insertar Enlaces" en ese canal.
+- **No funcionan los comandos `!tbxuser`**: Revisa que has colocado correctamente la `tebexCheck.apiKey` (Tebex Private Key).
+
+---
+
+## 🔄 Flujo de la Integración
 
 ```mermaid
 flowchart TD
-    A[Tebex] --> B[Validación de IP]
-    B --> C[Asignar X-Request-Id]
-    C --> D[Validar tipo de request]
-    D --> E[Extraer order_id / transaction_id]
-    E --> F{¿Duplicado?}
-    F -- Sí --> G[Responder 200 sin reenviar]
-    F -- No --> H[Construir embed]
-    H --> I[Enviar a Discord]
-    I --> J[Responder 200]
+    A[Tebex] -->|Webhook POST /| B[Validación de IP]
+    B --> C[Asignar ID de Petición]
+    C --> D[Validar tipo de Webhook]
+    D --> E[Extraer ID de Transacción]
+    E --> F{¿Evento Repetido?}
+    F -- Sí --> G[Ignorar y Responder 200]
+    F -- No --> H[Construir Embed Visual]
+    H --> I[Enviar al Canal de Discord]
+    I --> J[Guardar Transacción y Responder 200]
 ```
-
-## Requisitos
-
-- Node.js 18 o superior.
-- Un bot de Discord con permisos para leer y enviar mensajes.
-- Un canal de Discord destino.
-- Un endpoint de Tebex configurado hacia este servicio.
-
-## Instalación
-
-1. Crea `config.json` copiando `config.example.json`.
-2. Completa el token, canal, puerto, Private Key de Tebex y el embed.
-3. Instala dependencias:
-
-```bash
-npm install
-```
-
-4. Inicia el servicio:
-
-```bash
-node index.js
-```
-
-## Configuración
-
-### Configuración principal
-
-| Clave | Propósito |
-|---|---|
-| `showServer` | Muestra u oculta servidores asociados a cada producto |
-| `debug` | Activa logs más verbosos y desactiva la deduplicación |
-| `defPort` | Puerto HTTP del servicio |
-| `token` | Token del bot de Discord |
-| `shopchannelID` | Canal donde se publican los embeds |
-| `language` | Idioma de los textos de la app |
-
-### Configuración del embed
-
-| Clave | Propósito |
-|---|---|
-| `embed.url` | URL principal del embed |
-| `embed.url_infooter` | Añade el dominio al footer |
-| `embed.gifurl` | Imagen/thumbnail superior |
-| `embed.imageurl` | Imagen principal del embed |
-| `embed.emojititle` | Emoji del título |
-| `embed.emojireact` | Reacción automática al mensaje |
-| `embed.emojicurrency` | Emoji de moneda |
-| `embed.color` | Color del embed |
-| `embed.emojiproductArrow` | Prefijo visual para cada producto |
-| `embed.useMCskin` | Cambia el thumbnail al avatar estilo Minecraft |
-
-### Configuración API opcional
-
-| Clave | Propósito |
-|---|---|
-| `api.favicon_url` | Redirige `/favicon.ico` a una URL externa |
-
-### Tebex lookup
-
-| Clave | Propósito |
-|---|---|
-| `tebexCheck.prefix` | Prefijo para comandos de consulta |
-| `tebexCheck.apiKey` | Private Key de Tebex para consultar la API |
-| `tebexCheck.requiredRole` | Rol necesario para usar `!tbxuser` y `!tbxcheck` |
-
-## Configuración de Tebex
-
-1. Crea el endpoint webhook en Tebex apuntando a tu servidor.
-2. Permite únicamente las IPs oficiales de Tebex:
-   - `18.209.80.3`
-   - `54.87.231.232`
-3. Verifica que Tebex pueda alcanzar el endpoint.
-4. Revisa que el servicio responda correctamente a los eventos de validación.
-
-## Endpoints
-
-### `GET /healthz`
-
-Devuelve el estado básico del proceso:
-
-```json
-{
-  "ok": true,
-  "language": "es",
-  "uptime_seconds": 120,
-  "request_count": 18
-}
-```
-
-### `GET /metrics`
-
-Devuelve contadores internos del servicio:
-
-- requests totales
-- validaciones webhook
-- solicitudes aceptadas
-- solicitudes rechazadas
-- duplicados descartados
-- errores
-- payloads vacíos
-
-### `POST /`
-
-Recibe el webhook de Tebex y procesa:
-
-- validación de webhook
-- compra válida
-- rechazo por IP
-- deduplicación por `transaction_id` / `order_id`
-
-## Comandos de Tebex
-
-### `!tbxuser <nick|uuid>`
-
-Muestra el perfil Tebex del usuario, sus pagos y una paginación por botones.
-
-- `Anterior` / `Siguiente` para navegar entre páginas
-- Selector para abrir un pago concreto
-- Respuesta privada para los detalles del pago seleccionado
-
-### `!tbxcheck <tbx-id>`
-
-Muestra el detalle completo de un pago Tebex por ID de transacción.
-
-## Embed visual
-
-El embed actual prioriza lectura rápida para administración y usuarios:
-
-```text
-<emoji título> Compra confirmada
-────────────────────────────
-Cliente: usuario
-Total: $10.00 USD
-Productos:
-➜ Producto A x1 | $5.00
-➜ Producto B x2 | $5.00
-Footer: tienda.ejemplo.com
-```
-
-## Idempotencia
-
-El servicio guarda los eventos ya procesados en `.data/tebex-idempotency.json`.
-
-- Si Tebex reintenta el mismo evento, el servicio responde `200` y no duplica el mensaje.
-- En modo `debug`, esta verificación se omite para facilitar pruebas manuales.
-- Si quieres reiniciar la deduplicación local, puedes borrar `.data/`.
-
-## Logs y depuración
-
-Cada request recibe un `X-Request-Id` y ese ID se replica en logs y respuestas.
-
-En modo `debug`:
-
-- se registran más detalles de requests
-- se omite la deduplicación
-- se facilita validar el flujo end-to-end
-
-## Estructura del proyecto
-
-| Ruta | Propósito |
-|---|---|
-| `index.js` | Arranque principal de Discord + Express |
-| `handlers/` | Middlewares de request |
-| `functions/` | Lógica de envío, comandos Tebex y traducción |
-| `lib/` | Validación, logger, métricas e idempotencia |
-| `langs/` | Archivos de idioma |
-
-## Solución de problemas
-
-- `Not authorized` o `403`: la IP no está en la allowlist de Tebex.
-- `Webhook sin productos`: Tebex envió un payload vacío o incompleto.
-- No llega a Discord: revisa `shopchannelID`, token y permisos del bot.
-- Mensajes duplicados: el evento ya fue procesado y quedó en el store de idempotencia.
-- `Falta configurar tebexCheck.apiKey.`: no añadiste la Private Key de Tebex al `config.json`.
-
-## Notas
-
-- Este proyecto ya expone `GET /healthz` y `GET /metrics`.
-- Las dependencias directas se limpiaron para evitar paquetes nativos innecesarios.
-- El texto del embed puede ajustarse sin tocar la lógica del webhook.
