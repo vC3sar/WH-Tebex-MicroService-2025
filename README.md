@@ -1,4 +1,4 @@
-# 🛒 WH-Tebex-MicroService
+# WH-Tebex-MicroService [![Node.js CI](https://github.com/vC3sar/WH-Tebex-MicroService-2025/actions/workflows/node.js.yml/badge.svg)](https://github.com/vC3sar/WH-Tebex-MicroService-2025/actions/workflows/node.js.yml)
 
 Microservicio Node.js robusto, seguro y fácil de usar para recibir webhooks de **Tebex**, validar su origen, evitar notificaciones duplicadas y publicar las compras de forma instantánea en **Discord** con embeds altamente personalizables y profesionales.
 
