@@ -1,30 +1,37 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const colors = require('colors');
-const { loadConfig } = require('../lib/load-config.js');
+const colors = require("colors");
+const { loadConfig } = require("../lib/load-config.js");
 const { config } = loadConfig();
 const { debug, api } = config;
-const logger = require('../lib/logger.js');
-const { incrementMetric } = require('../lib/metrics.js');
-
-const allowedWebhookIps = new Set(['18.209.80.3', '54.87.231.232', '127.0.0.1', '::ffff:127.0.0.1']);
-const publicPaths = new Set(['/healthz', '/metrics']);
+const logger = require("../lib/logger.js");
+const { incrementMetric } = require("../lib/metrics.js");
+// update here https://docs.tebex.io/developers/webhooks/overview#ip-address
+const allowedWebhookIps = new Set([
+  "18.209.80.3",
+  "54.87.231.232",
+  "127.0.0.1",
+  "::ffff:127.0.0.1",
+]);
+const publicPaths = new Set(["/healthz", "/metrics"]);
 
 function normalizeIp(ip) {
-  return String(ip || '').replace(/^::ffff:/, '');
+  return String(ip || "").replace(/^::ffff:/, "");
 }
 
 function getClientIP(req) {
-  return normalizeIp(req.headers['cf-connecting-ip'] || req.socket.remoteAddress);
+  return normalizeIp(
+    req.headers["cf-connecting-ip"] || req.socket.remoteAddress,
+  );
 }
 
-router.use('/', function (req, res, next) {
+router.use("/", function (req, res, next) {
   if (publicPaths.has(req.path)) {
     next();
     return;
   }
 
-  if (req.path === '/favicon.ico' && api?.favicon_url) {
+  if (req.path === "/favicon.ico" && api?.favicon_url) {
     return res.redirect(api.favicon_url);
   }
 
@@ -37,15 +44,15 @@ router.use('/', function (req, res, next) {
   }
 
   if (allowedWebhookIps.has(ip)) {
-    incrementMetric('webhook_accepts_total');
+    incrementMetric("webhook_accepts_total");
     logger.info(`webhook accepted ip=${ip}`, { requestId });
     next();
     return;
   }
 
-  incrementMetric('webhook_rejects_total');
+  incrementMetric("webhook_rejects_total");
   logger.warn(`webhook rejected ip=${ip}`, { requestId });
-  return res.status(403).json({ error: 'Not authorized', requestId });
+  return res.status(403).json({ error: "Not authorized", requestId });
 });
 
 module.exports = router;
